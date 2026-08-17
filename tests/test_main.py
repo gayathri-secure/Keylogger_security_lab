@@ -50,3 +50,35 @@ def test_process_event_handles_logging_error(monkeypatch, capsys):
 
     assert result is False
     assert "Logging failed: simulated logging failure" in captured.out
+
+class FakeInputSource:
+    def get_event(self):
+        return Event(
+            timestamp=datetime(2026, 8, 17, 17, 0, 0),
+            event_type="FAKE",
+            value="FAKE_EVENT",
+            source="fake_source"
+        )
+
+
+def test_run_source(monkeypatch):
+    processed_events = []
+
+    monkeypatch.setattr(
+        main,
+        "process_event",
+        lambda event: processed_events.append(event) or True
+    )
+
+    source = FakeInputSource()
+
+    result = main.run_source(source)
+
+    assert result is True
+    assert len(processed_events) == 1
+
+    event = processed_events[0]
+
+    assert event.event_type == "FAKE"
+    assert event.value == "FAKE_EVENT"
+    assert event.source == "fake_source"

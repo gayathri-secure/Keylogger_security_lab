@@ -1,5 +1,5 @@
 from src.formatter import format_event
-from src.input_source import TestInputSource
+from src.input_source import InputSource, TestInputSource
 from src.logger import LoggingError, write_event
 
 
@@ -15,11 +15,15 @@ def process_event(event):
     return True
 
 
+def run_source(input_source: InputSource):
+    event = input_source.get_event()
+    return process_event(event)
+
+
 def main():
     input_source = TestInputSource()
-    event = input_source.get_event()
 
-    if process_event(event):
+    if run_source(input_source):
         print("Test event written successfully.")
 
 

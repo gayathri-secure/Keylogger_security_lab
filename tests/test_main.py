@@ -4,10 +4,14 @@ import src.main as main
 from src.event import Event
 
 from src.logger import LoggingError
+import json
+
+from src.serializer import serialize_event
 
 def test_process_event(tmp_path, monkeypatch):
     log_dir = tmp_path / "logs"
     log_file = log_dir / "events.log"
+    structured_file = log_dir / "events.jsonl"
 
     def fake_write_event(event):
         log_dir.mkdir(exist_ok=True)
@@ -16,7 +20,19 @@ def test_process_event(tmp_path, monkeypatch):
             encoding="utf-8"
         )
 
+    def fake_write_structured_event(event):
+        log_dir.mkdir(exist_ok=True)
+        structured_file.write_text(
+            serialize_event(event) + "\n",
+            encoding="utf-8"
+        )
+
     monkeypatch.setattr(main, "write_event", fake_write_event)
+    monkeypatch.setattr(
+        main,
+        "write_structured_event",
+        fake_write_structured_event
+    )
 
     event = Event(
         timestamp=datetime(2026, 8, 17, 16, 30, 0),
@@ -25,12 +41,29 @@ def test_process_event(tmp_path, monkeypatch):
         source="test_source"
     )
 
-    main.process_event(event)
+    result = main.process_event(event)
+
+    assert result is True
 
     assert log_file.exists()
     assert log_file.read_text(encoding="utf-8") == (
-        "[2026-08-17 16:30:00] [TEST] [test_source] INTEGRATION_TEST\n"
+        "[2026-08-17 16:30:00] "
+        "[TEST] "
+        "[test_source] "
+        "INTEGRATION_TEST\n"
     )
+
+    assert structured_file.exists()
+
+    structured_data = json.loads(
+        structured_file.read_text(encoding="utf-8")
+    )
+
+    assert structured_data["event_type"] == "TEST"
+    assert structured_data["value"] == "INTEGRATION_TEST"
+    assert structured_data["source"] == "test_source"
+
+
 def test_process_event_handles_logging_error(monkeypatch, capsys):
     def fail_write_event(event):
         raise LoggingError("simulated logging failure")

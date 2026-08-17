@@ -1,13 +1,18 @@
 from src.formatter import format_event
 from src.input_source import InputSource, TestInputSource
 from src.logger import LoggingError, write_event
-
+from src.logger import (
+    LoggingError,
+    write_event,
+    write_structured_event,
+)
 
 def process_event(event):
     formatted_event = format_event(event)
 
     try:
         write_event(formatted_event)
+        write_structured_event(event)
     except LoggingError as exc:
         print(f"Logging failed: {exc}")
         return False

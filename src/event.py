@@ -18,3 +18,11 @@ class Event:
 
         if not self.source.strip():
             raise ValueError("source cannot be empty")
+
+    def to_dict(self):
+        return {
+            "timestamp": self.timestamp.isoformat(),
+            "event_type": self.event_type,
+            "value": self.value,
+            "source": self.source,
+        }

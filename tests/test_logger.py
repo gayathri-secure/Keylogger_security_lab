@@ -1,7 +1,9 @@
 import pytest
 
 import src.logger as logger
+from datetime import datetime
 
+from src.event import Event
 
 def test_write_event(tmp_path, monkeypatch):
     log_dir = tmp_path / "logs"
@@ -78,3 +80,31 @@ def test_write_event_raises_logging_error_during_rotation(
         match="Unable to write event"
     ):
         logger.write_event("NEW_EVENT")
+
+def test_write_structured_event(tmp_path, monkeypatch):
+    log_dir = tmp_path / "logs"
+    structured_file = log_dir / "events.jsonl"
+
+    monkeypatch.setattr(logger, "LOG_DIR", log_dir)
+    monkeypatch.setattr(
+        logger,
+        "STRUCTURED_LOG_FILE",
+        structured_file
+    )
+
+    event = Event(
+        timestamp=datetime(2026, 8, 18, 0, 20, 0),
+        event_type="TEST",
+        value="STRUCTURED_EVENT",
+        source="test_source"
+    )
+
+    logger.write_structured_event(event)
+
+    assert structured_file.exists()
+
+    content = structured_file.read_text(encoding="utf-8")
+
+    assert '"event_type": "TEST"' in content
+    assert '"value": "STRUCTURED_EVENT"' in content
+    assert '"source": "test_source"' in content

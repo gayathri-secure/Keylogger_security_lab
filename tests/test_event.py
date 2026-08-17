@@ -46,3 +46,23 @@ def test_empty_source():
             value="TEST_EVENT",
             source=""
         )
+
+
+def test_event_to_dict():
+    timestamp = datetime(2026, 8, 18, 0, 10, 0)
+
+    event = Event(
+        timestamp=timestamp,
+        event_type="TEST",
+        value="STRUCTURED_EVENT",
+        source="test_source"
+    )
+
+    result = event.to_dict()
+
+    assert result == {
+        "timestamp": "2026-08-18T00:10:00",
+        "event_type": "TEST",
+        "value": "STRUCTURED_EVENT",
+        "source": "test_source",
+    }

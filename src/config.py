@@ -12,5 +12,6 @@ LOG_DIR = Path(
 
 LOG_FILE = LOG_DIR / "events.log"
 
-MAX_LOG_SIZE = 1024 * 1024
+STRUCTURED_LOG_FILE = LOG_DIR / "events.jsonl"
 
+MAX_LOG_SIZE = 1024 * 1024

@@ -10,9 +10,15 @@ def test_format_event():
     event = Event(
         timestamp=timestamp,
         event_type="TEST",
-        value="HELLO"
+        value="HELLO",
+        source="test_source"
     )
 
     result = format_event(event)
 
-    assert result == "[2026-08-17 16:20:30] [TEST] HELLO"
+    assert result == (
+        "[2026-08-17 16:20:30] "
+        "[TEST] "
+        "[test_source] "
+        "HELLO"
+    )

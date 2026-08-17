@@ -20,12 +20,13 @@ def test_process_event(tmp_path, monkeypatch):
     event = Event(
         timestamp=datetime(2026, 8, 17, 16, 30, 0),
         event_type="TEST",
-        value="INTEGRATION_TEST"
+        value="INTEGRATION_TEST",
+        source="test_source"
     )
 
     main.process_event(event)
 
     assert log_file.exists()
     assert log_file.read_text(encoding="utf-8") == (
-        "[2026-08-17 16:30:00] [TEST] INTEGRATION_TEST\n"
+        "[2026-08-17 16:30:00] [TEST] [test_source] INTEGRATION_TEST\n"
     )

@@ -7,6 +7,7 @@ class Event:
     timestamp: datetime
     event_type: str
     value: str
+    source: str
 
     def __post_init__(self):
         if not self.event_type.strip():
@@ -15,3 +16,5 @@ class Event:
         if not self.value.strip():
             raise ValueError("value cannot be empty")
 
+        if not self.source.strip():
+            raise ValueError("source cannot be empty")

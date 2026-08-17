@@ -14,5 +14,6 @@ class TestInputSource:
         return Event(
             timestamp=datetime.now(),
             event_type="TEST",
-            value="TEST_EVENT"
+            value="TEST_EVENT",
+            source="test_source"
         )

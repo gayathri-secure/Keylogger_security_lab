@@ -12,7 +12,8 @@ def process_test_input(value):
     event = Event(
         timestamp=datetime.now(),
         event_type="KEYBOARD_TEST",
-        value=value
+        value=value,
+        source="keyboard_lab"
     )
 
     process_event(event)

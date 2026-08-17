@@ -1,4 +1,4 @@
-from pathlib import Path
+import pytest
 
 import src.logger as logger
 
@@ -14,3 +14,18 @@ def test_write_event(tmp_path, monkeypatch):
 
     assert log_file.exists()
     assert log_file.read_text(encoding="utf-8") == "TEST_EVENT\n"
+
+
+def test_write_event_raises_logging_error(monkeypatch):
+    def fail_mkdir(*args, **kwargs):
+        raise OSError("simulated directory failure")
+
+    monkeypatch.setattr(logger, "LOG_DIR", type("FakeLogDir", (), {
+        "mkdir": fail_mkdir
+    })())
+
+    with pytest.raises(
+        logger.LoggingError,
+        match="Unable to write event"
+    ):
+        logger.write_event("TEST_EVENT")

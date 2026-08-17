@@ -1,5 +1,5 @@
-from src.event import Event
 from src.formatter import format_event
+from src.input_source import get_test_event
 from src.logger import write_event
 
 
@@ -9,7 +9,7 @@ def process_event(event):
 
 
 def main():
-    event = Event.create_test_event()
+    event = get_test_event()
     process_event(event)
 
     print("Test event written successfully.")

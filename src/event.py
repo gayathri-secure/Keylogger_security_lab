@@ -15,10 +15,3 @@ class Event:
         if not self.value.strip():
             raise ValueError("value cannot be empty")
 
-    @classmethod
-    def create_test_event(cls):
-        return cls(
-            timestamp=datetime.now(),
-            event_type="TEST",
-            value="TEST_EVENT"
-        )

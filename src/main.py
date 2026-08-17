@@ -2,7 +2,6 @@ from src.formatter import format_event
 from src.input_source import TestInputSource
 from src.logger import write_event
 
-
 def process_event(event):
     formatted_event = format_event(event)
     write_event(formatted_event)

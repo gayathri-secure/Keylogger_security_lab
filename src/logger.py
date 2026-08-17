@@ -1,9 +1,4 @@
-from pathlib import Path
-
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-LOG_DIR = PROJECT_ROOT / "logs"
-LOG_FILE = LOG_DIR / "events.log"
+from src.config import LOG_DIR, LOG_FILE
 
 
 def write_event(event):

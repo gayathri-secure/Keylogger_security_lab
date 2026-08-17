@@ -11,3 +11,6 @@ LOG_DIR = Path(
 )
 
 LOG_FILE = LOG_DIR / "events.log"
+
+MAX_LOG_SIZE = 1024 * 1024
+

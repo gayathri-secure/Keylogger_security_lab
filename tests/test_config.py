@@ -14,6 +14,7 @@ def test_default_config_paths(monkeypatch):
     assert config.LOG_DIR == config.PROJECT_ROOT / "logs"
     assert config.LOG_FILE == config.LOG_DIR / "events.log"
     assert isinstance(config.LOG_FILE, Path)
+    assert config.MAX_LOG_SIZE == 1024 * 1024
 
 
 def test_custom_log_directory(monkeypatch, tmp_path):

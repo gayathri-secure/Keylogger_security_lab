@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from event import Event
-from formatter import format_event
-from logger import write_event
+from src.event import Event
+from src.formatter import format_event
+from src.logger import write_event
 
 
 def main():
